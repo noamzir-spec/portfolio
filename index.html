@@ -818,6 +818,10 @@
     {name:'Yosemite National Park, CA', note:'Hiking the valley', lat:37.865, lon:-119.538, country:'USA', img:'photos/yosemite.jpg'},
     {name:'San Francisco, CA', note:'California', lat:37.775, lon:-122.419, country:'USA'},
     {name:'Los Angeles, CA', note:'California', lat:34.052, lon:-118.244, country:'USA'},
+    {name:'Nevada', note:'USA', lat:39.3, lon:-116.6, country:'USA'},
+    {name:'Arizona', note:'USA', lat:34.3, lon:-111.7, country:'USA'},
+    {name:'Florida', note:'USA', lat:28.1, lon:-81.6, country:'USA'},
+    {name:'The Caribbean', note:'Caribbean', lat:17.5, lon:-71.5, country:null},
     {name:'United Kingdom', note:'Europe', lat:52.5, lon:-1.5, country:'UK'},
     {name:'Spain', note:'Europe', lat:40.2, lon:-3.7, country:'Spain'},
     {name:'Switzerland', note:'Europe', lat:46.8, lon:8.2, country:'Switzerland'},
@@ -835,7 +839,7 @@
     return [MAPT[0]+MAPK*X, MAPT[1]-MAPK*Y];
   }
   const pinsG=$('pins'), mapPop=$('mapPop'), mapLegend=$('mapLegend'), worldMap=$('worldMap');
-  const countries=new Set(PLACES.map(p=>p.country));
+  const countries=new Set(PLACES.map(p=>p.country).filter(Boolean));
   mapLegend.innerHTML=`<button class="count" tabindex="-1">${PLACES.length} places · ${countries.size} ${countries.size===1?'country':'countries'}</button>`;
   PLACES.forEach((pl,i)=>{
     const [px,py]=projNE(pl.lon,pl.lat); pl.xy=[px,py];
