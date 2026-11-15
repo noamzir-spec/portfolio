@@ -276,6 +276,7 @@
           <g id="spin">
             <g fill="#2e2e33" stroke="#2e2e33">
               <path d="M-58 1 Q-60 -4 -50 -3 L50 -3 Q60 -4 58 1 Q56 9 46 9 L-46 9 Q-56 9 -58 1Z" stroke="none"/>
+              <g id="body">
               <path id="legB" fill="none" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
               <path id="legF" fill="none" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M-35 -2 Q-35 -14 -24 -14 L-14 -14 Q-12 -6 -12 -2Z" stroke-width="3" stroke-linejoin="round"/>
@@ -288,6 +289,7 @@
               <path id="neck" stroke-width="11" stroke-linecap="round" fill="none"/>
               <g id="head" stroke="none">
                 <circle r="16"/>
+              </g>
               </g>
             </g>
           </g>
@@ -414,7 +416,7 @@
   let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
 
   // trees (behind ground)
-  const busy = x => SEGS.some(s=>x>s.xs-450 && x<s.xe+250) || (x>12550 && x<13100);
+  const busy = x => SEGS.some(s=>x>s.xs-450 && x<s.xe+250) || (x>12550 && x<14150);
   const treeG=$('trees');
   for (let x=-2600; x<END_X+3600; x+=110+rnd()*260){
     if (busy(x)) continue;
@@ -447,6 +449,32 @@
     el('rect',{x:-26,y:-26,width:52,height:52,fill:'#ffb703',stroke:'#0f1a2e','stroke-width':4},g);
     const t=el('text',{x:0,y:12,'text-anchor':'middle','font-family':'Anton','font-size':34,fill:'#0f1a2e',transform:'rotate(-45)'},g); t.textContent='!';
   }
+  // lodge at the bottom
+  const LODGE_X = 13880;
+  { const x=LODGE_X, y=ground(x)+8;
+    const g=el('g',{transform:`translate(${x} ${y})`},props);
+    el('rect',{x:-205,y:-18,width:410,height:18,fill:'#6b4a33'},g);                       // porch deck
+    el('rect',{x:-180,y:-190,width:360,height:174,fill:'#8a5a3b'},g);                     // log walls
+    for (let i=0;i<7;i++){ const yy=-188+i*25;
+      el('rect',{x:-180,y:yy,width:360,height:22,rx:11,fill:i%2?'#93633f':'#83542f'},g);
+      el('circle',{cx:-180,cy:yy+11,r:11,fill:'#c89466',stroke:'#6b4226','stroke-width':3},g);
+      el('circle',{cx:180,cy:yy+11,r:11,fill:'#c89466',stroke:'#6b4226','stroke-width':3},g); }
+    el('rect',{x:95,y:-330,width:42,height:120,fill:'#7d7d86'},g);                      // stone chimney
+    el('rect',{x:89,y:-340,width:54,height:16,fill:'#f4f8fc'},g);
+    el('path',{d:'M-225 -178L0 -330L225 -178Z',fill:'#4a2f1f'},g);                       // roof
+    el('path',{d:'M-236 -172L0 -338L236 -172L212 -172L0 -312L-212 -172Z',fill:'#f4f8fc'},g); // snow on roof
+    el('path',{d:'M-60 -205L0 -246L60 -205Z',fill:'#6b4226'},g);
+    el('circle',{cx:0,cy:-224,r:16,fill:'#ffd36e',stroke:'#4a2f1f','stroke-width':5},g);      // round attic window
+    for (const wx of [-140,70]){ el('rect',{x:wx,y:-140,width:70,height:58,fill:'#ffd36e',stroke:'#4a2f1f','stroke-width':7},g);
+      el('line',{x1:wx+35,y1:-140,x2:wx+35,y2:-82,stroke:'#4a2f1f','stroke-width':4},g);
+      el('rect',{x:wx-6,y:-84,width:82,height:8,fill:'#f4f8fc'},g); }
+    el('path',{d:'M-34 -18L-34 -112Q0 -136 34 -112L34 -18Z',fill:'#4a2f1f'},g);           // door
+    el('circle',{cx:22,cy:-62,r:4,fill:'#ffb703'},g);
+    el('rect',{x:-70,y:-176,width:140,height:30,rx:6,fill:'#3b2416'},g);                    // sign
+    const t=el('text',{x:0,y:-153,'text-anchor':'middle','font-family':'Anton, sans-serif','font-size':22,'letter-spacing':3,fill:'#ffd36e'},g); t.textContent='THE LODGE';
+    for (const lx of [-120,120]) el('circle',{cx:lx,cy:-30,r:9,fill:'#ffb703',opacity:.9},g); // porch lanterns
+  }
+  const LODGE_SMOKE = {x:LODGE_X+116, y:ground(LODGE_X)+8-340};
   // finish arch
   { const x=12800, y=ground(x), w=360;
     el('rect',{x:x-w/2-8,y:y-300,width:16,height:300,fill:'#0f1a2e'},props);
@@ -688,8 +716,10 @@
     grab: {bf:[-25,-6],bk:[-25,-24],hip:[-2,-42],fk:[25,-26],ff:[25,-6],sh:[-3,-80],hd:[-1,-104],be:[-36,-94],bh:[-58,-110],fe:[22,-46],fh:[22,2]},
   };
   const legB=$('legB'),legF=$('legF'),armB=$('armB'),armF=$('armF'),torso=$('torso'),neck=$('neck'),head=$('head'),handB=$('handB'),handF=$('handF');
-  function setPose(a,b,t){
+  function setPose(a,b,t,sway=0,lean=0){
     const q={}; for(const k in a) q[k]=[lerp(a[k][0],b[k][0],t),lerp(a[k][1],b[k][1],t)];
+    for(const k of ['sh','hd','be','bh','fe','fh']) q[k][0]+=lean; q.hip[0]+=lean*0.5;
+    q.bh[1]+=sway; q.be[1]+=sway*0.5; q.fh[1]-=sway; q.fe[1]-=sway*0.5;
     const p=v=>v[0].toFixed(1)+' '+v[1].toFixed(1), o=(v,dx,dy)=>[v[0]+dx,v[1]+dy];
     const hL=o(q.hip,-9,0), hR=o(q.hip,9,0), sL=o(q.sh,-14,5), sR=o(q.sh,14,5);
     legB.setAttribute('d',`M${p(q.bf)}L${p(q.bk)}L${p(hL)}`);
@@ -732,7 +762,7 @@
   }
 
   /* ---------------- loop ---------------- */
-  const cam=$('cam'), rider=$('rider'), flipG=$('flip'), spinG=$('spin');
+  const cam=$('cam'), rider=$('rider'), bodyG=$('body'), flipG=$('flip'), spinG=$('spin');
   const trail=$('trail'), sky=$('sky'), sun=$('sun'), hero=$('hero');
   const altEl=$('alt'), spdEl=$('spd'), fill=$('trackFill');
   const pop=$('pop'), popName=$('popName'), popPts=$('popPts');
@@ -777,8 +807,18 @@
       sx = 1; tuck=0.3; extraRot = 2*Math.sin(now/90);
     }
     // landing / carving compression
-    if (st.mode==='ground'){ tuck = clamp(speed*0.012,0,0.18); }
-    setPose(P.stand, poseB, tuck);
+    let sway=0, lean=0;
+    if (st.mode==='ground'){
+      // athletic stance that breathes when idle and crouches/leans into speed
+      const sp=clamp(speed*0.02,0,1);
+      tuck = 0.3 + 0.05*Math.sin(now/420) + sp*0.25;
+      sway = 7*Math.sin(now/650) * (1-sp*0.6);
+      lean = (x-prevX>=0?1:-1)*sp*7;
+    } else if (st.mode==='rail'){ sway = 5*Math.sin(now/140); }
+    setPose(P.stand, poseB, tuck, sway, lean);
+    // keep the body closer to vertical than the board: riders stack over their feet instead of tipping downhill
+    const upright = st.mode==='ground' ? 0.6 : st.mode==='rail' ? 0.5 : 0.6*(1-Math.sin(Math.PI*st.s));
+    bodyG.setAttribute('transform',`rotate(${(-st.ang*upright).toFixed(2)} 0 -6)`);
     if (Math.abs(sx)<0.06) sx = sx<0?-0.06:0.06;
     rider.setAttribute('transform',`translate(${st.x.toFixed(1)} ${st.y.toFixed(1)}) rotate(${(st.ang+extraRot).toFixed(2)})`);
     flipG.setAttribute('transform',`rotate(${flip.toFixed(1)} 0 -52)`);
@@ -863,6 +903,11 @@
       ctx.beginPath(); ctx.arc(q.x,q.y,q.r*(0.5+q.life*0.5),0,6.283); ctx.fill();
     }
     if (parts.length>600) parts.splice(0,parts.length-600);
+    // chimney smoke from the lodge
+    if (!reduce && p>0.8){
+      const sxs=camX+LODGE_SMOKE.x*scale, sys=camY+LODGE_SMOKE.y*scale;
+      if (Math.random()<0.3*dt) parts.push({x:sxs,y:sys,vx:-0.3-Math.random()*0.4,vy:-0.8,life:1,r:6+Math.random()*6,c:'225,228,236',g:-0.005});
+    }
 
     requestAnimationFrame(frame);
   }
