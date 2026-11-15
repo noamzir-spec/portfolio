@@ -276,17 +276,17 @@
           <g id="spin">
             <g fill="#2e2e33" stroke="#2e2e33">
               <path d="M-58 1 Q-60 -4 -50 -3 L50 -3 Q60 -4 58 1 Q56 9 46 9 L-46 9 Q-56 9 -58 1Z" stroke="none"/>
-              <path id="legB" fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <path id="legF" fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="-33" y="-12" width="22" height="12" rx="4" stroke="none"/>
-              <rect x="11" y="-12" width="22" height="12" rx="4" stroke="none"/>
-              <path id="armB" fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle id="handB" r="8" stroke="none"/>
-              <path id="torso" fill="none" stroke-width="34" stroke-linecap="round"/>
-              <path id="armF" fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle id="handF" r="8" stroke="none"/>
+              <path id="legB" fill="none" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+              <path id="legF" fill="none" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M-35 -2 Q-35 -14 -24 -14 L-14 -14 Q-12 -6 -12 -2Z" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M35 -2 Q35 -14 24 -14 L14 -14 Q12 -6 12 -2Z" stroke-width="3" stroke-linejoin="round"/>
+              <path id="armB" fill="none" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+              <path id="armF" fill="none" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle id="handB" r="7.5" stroke="none"/>
+              <circle id="handF" r="7.5" stroke="none"/>
+              <path id="torso" stroke-width="10" stroke-linejoin="round"/>
+              <path id="neck" stroke-width="11" stroke-linecap="round" fill="none"/>
               <g id="head" stroke="none">
-                <rect x="-11" y="2" width="20" height="12" rx="5"/>
                 <circle r="16"/>
               </g>
             </g>
@@ -371,7 +371,7 @@
     {type:'air', xs:1500, xe:1790, h:95,  trick:'ollie', name:'Ollie', label:'Education'},
     {type:'air', xs:3000, xe:3720, h:330, trick:'spin', amt:360, name:'Backside 360', label:'Experience'},
     {type:'air', xs:4170, xe:RAIL.x1, h:55},
-    {type:'rail',xs:RAIL.x1, xe:RAIL.x2, trick:'slide', name:'Boardslide', label:'Projects'},
+    {type:'rail',xs:RAIL.x1, xe:RAIL.x2, trick:'slide', name:'50-50 Grind', label:'Projects'},
     {type:'air', xs:RAIL.x2, xe:5340, h:70},
     {type:'air', xs:6400, xe:7260, h:390, trick:'flip', amt:-360, name:'Backflip', label:'Leadership'},
     {type:'air', xs:CLIFF, xe:8980, h:170, trick:'grab', name:'Method Air', label:'Hobbies'},
@@ -681,20 +681,23 @@
   TRICKS.forEach(t=>{ const d=document.createElement('div'); d.className='dot'; d.style.top=(100*(t.xs-START_X)/(END_X-START_X))+'%'; track.appendChild(d); t.dot=d; });
 
   /* ---------------- rider pose ---------------- */
+  // front-facing rider, like the reference silhouettes: A-frame legs with knees bent in, jacket torso, arms out for balance
   const P = {
-    stand:{bf:[-22,-4],bk:[-22,-36],hip:[-2,-64],fk:[18,-38],ff:[22,-4],sh:[4,-100],hd:[8,-126],be:[-26,-92],bh:[-50,-78],fe:[32,-98],fh:[60,-90]},
-    tuck: {bf:[-22,-4],bk:[-36,-32],hip:[-2,-46],fk:[32,-36],ff:[22,-4],sh:[4,-82],hd:[10,-108],be:[-30,-96],bh:[-60,-104],fe:[34,-96],fh:[64,-106]},
-    grab: {bf:[-22,-4],bk:[-34,-30],hip:[-4,-46],fk:[32,-38],ff:[22,-4],sh:[0,-82],hd:[12,-106],be:[-30,-98],bh:[-58,-112],fe:[-4,-44],fh:[-12,4]},
+    stand:{bf:[-25,-6],bk:[-15,-33],hip:[0,-60],fk:[15,-33],ff:[25,-6],sh:[0,-100],hd:[1,-124],be:[-34,-86],bh:[-55,-74],fe:[34,-86],fh:[55,-74]},
+    tuck: {bf:[-25,-6],bk:[-24,-26],hip:[0,-44],fk:[24,-26],ff:[25,-6],sh:[0,-82],hd:[1,-106],be:[-36,-94],bh:[-58,-106],fe:[36,-94],fh:[58,-106]},
+    grab: {bf:[-25,-6],bk:[-25,-24],hip:[-2,-42],fk:[25,-26],ff:[25,-6],sh:[-3,-80],hd:[-1,-104],be:[-36,-94],bh:[-58,-110],fe:[22,-46],fh:[22,2]},
   };
-  const legB=$('legB'),legF=$('legF'),armB=$('armB'),armF=$('armF'),torso=$('torso'),head=$('head'),handB=$('handB'),handF=$('handF');
+  const legB=$('legB'),legF=$('legF'),armB=$('armB'),armF=$('armF'),torso=$('torso'),neck=$('neck'),head=$('head'),handB=$('handB'),handF=$('handF');
   function setPose(a,b,t){
     const q={}; for(const k in a) q[k]=[lerp(a[k][0],b[k][0],t),lerp(a[k][1],b[k][1],t)];
-    const p=v=>v[0].toFixed(1)+' '+v[1].toFixed(1);
-    legB.setAttribute('d',`M${p(q.bf)}L${p(q.bk)}L${p(q.hip)}`);
-    legF.setAttribute('d',`M${p(q.ff)}L${p(q.fk)}L${p(q.hip)}`);
-    torso.setAttribute('d',`M${p(q.hip)}L${p(q.sh)}`);
-    armB.setAttribute('d',`M${p(q.sh)}L${p(q.be)}L${p(q.bh)}`);
-    armF.setAttribute('d',`M${p(q.sh)}L${p(q.fe)}L${p(q.fh)}`);
+    const p=v=>v[0].toFixed(1)+' '+v[1].toFixed(1), o=(v,dx,dy)=>[v[0]+dx,v[1]+dy];
+    const hL=o(q.hip,-9,0), hR=o(q.hip,9,0), sL=o(q.sh,-14,5), sR=o(q.sh,14,5);
+    legB.setAttribute('d',`M${p(q.bf)}L${p(q.bk)}L${p(hL)}`);
+    legF.setAttribute('d',`M${p(q.ff)}L${p(q.fk)}L${p(hR)}`);
+    torso.setAttribute('d',`M${p(o(q.sh,-16,1))}Q${p(o(q.sh,0,-5))} ${p(o(q.sh,16,1))}L${p(o(q.hip,15,4))}Q${p(o(q.hip,0,8))} ${p(o(q.hip,-15,4))}Z`);
+    neck.setAttribute('d',`M${p(o(q.sh,0,-2))}L${p(o(q.hd,0,10))}`);
+    armB.setAttribute('d',`M${p(sL)}L${p(q.be)}L${p(q.bh)}`);
+    armF.setAttribute('d',`M${p(sR)}L${p(q.fe)}L${p(q.fh)}`);
     head.setAttribute('transform',`translate(${p(q.hd)})`);
     handB.setAttribute('cx',q.bh[0].toFixed(1)); handB.setAttribute('cy',q.bh[1].toFixed(1));
     handF.setAttribute('cx',q.fh[0].toFixed(1)); handF.setAttribute('cy',q.fh[1].toFixed(1));
@@ -766,12 +769,12 @@
     if (st.mode==='air'){
       const s=st.s, seg=st.seg, e=ease(clamp((s-0.08)/0.76,0,1));
       tuck = Math.sin(Math.PI*s)*0.55;
-      if (seg.trick==='spin'){ sx=Math.cos(seg.amt*e*Math.PI/180); tuck=Math.sin(Math.PI*s)*0.85; }
+      if (seg.trick==='spin'){ const c=Math.cos(seg.amt*e*Math.PI/180); sx=(c<0?-1:1)*(0.55+0.45*Math.abs(c)); tuck=Math.sin(Math.PI*s)*0.85; }
       else if (seg.trick==='flip'){ flip=seg.amt*e; tuck=Math.sin(Math.PI*s); }
       else if (seg.trick==='grab'){ poseB=P.grab; tuck=clamp(Math.sin(Math.PI*s)*1.6,0,1); extraRot=-14*Math.sin(Math.PI*s); }
       else if (seg.trick==='ollie'){ extraRot=-16*Math.sin(Math.PI*clamp(s*1.3,0,1)); }
     } else if (st.mode==='rail'){
-      sx = 0.32 + 0.04*Math.sin(now/60); tuck=0.25;
+      sx = 1; tuck=0.3; extraRot = 2*Math.sin(now/90);
     }
     // landing / carving compression
     if (st.mode==='ground'){ tuck = clamp(speed*0.012,0,0.18); }
