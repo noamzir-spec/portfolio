@@ -107,10 +107,10 @@
   #lightbox figcaption{text-align:center;padding:10px;font-weight:500}
   #lightbox .x{color:#fff;opacity:.7;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
   /* section dock */
-  #dock{position:fixed;left:50%;top:92px;z-index:5;width:min(640px,calc(100vw - 40px));display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-        transform:translate(-50%,-16px);opacity:0;pointer-events:none;transition:opacity .5s,transform .5s}
-  #dock.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-  .dockhead{grid-column:1/-1;display:flex;align-items:baseline;justify-content:center;gap:10px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+  #dock{position:fixed;right:64px;top:96px;z-index:5;width:min(440px,38vw);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+        transform:translateY(-16px);opacity:0;pointer-events:none;transition:opacity .5s,transform .5s}
+  #dock.show{opacity:1;transform:none;pointer-events:auto}
+  .dockhead{grid-column:1/-1;white-space:nowrap;display:flex;align-items:baseline;justify-content:center;gap:10px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.3)}
   .sec{justify-content:flex-start}
   .dockhead span{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
   .dockhead b{font-family:Anton,sans-serif;font-weight:400;font-size:20px}
@@ -220,7 +220,7 @@
     .pill b{font-size:17px}
     .hud .pill:nth-child(1),.hud .pill:nth-child(2){display:none}
     .hud #secBtn{display:none}
-    #dock{top:66px;grid-template-columns:1fr 1fr;gap:6px;width:calc(100vw - 24px)}
+    #dock{top:66px;right:12px;grid-template-columns:1fr 1fr;gap:6px;width:calc(100vw - 24px)}
     .dockhead span{font-size:10px}
     .sec{padding:7px 10px 7px 7px;font-size:12px}
     #toast{top:70px;width:calc(100vw - 24px);flex-wrap:wrap;gap:4px 12px}
@@ -322,7 +322,7 @@
 
 <div id="cards"></div>
 <div id="gallery"></div>
-<div id="dock" aria-label="Sections about Noam"><div class="dockhead"><span>Run complete · explore all sections</span><b id="unlockCount">1 / 8</b></div></div>
+<div id="dock" aria-label="Sections about Noam"><div class="dockhead"><span>Explore all sections</span><b id="unlockCount">1 / 8</b></div></div>
 <button id="toast" type="button"></button>
 <div id="panel" role="dialog" aria-modal="true" aria-labelledby="pTitle">
   <div class="sheet">
@@ -454,19 +454,39 @@
     el('path',{d:`M${x-w/2} ${y-300}L${x+w/2} ${ground(x+w/2)-300}L${x+w/2} ${ground(x+w/2)-230}L${x-w/2} ${y-230}Z`,fill:'#ff5a1f'},props);
     const t=el('text',{x:x,y:y-252,'text-anchor':'middle','font-family':'Anton','font-size':48,fill:'#fff',transform:`rotate(${Math.atan2(ground(x+w/2)-y,w)*180/Math.PI} ${x} ${y-265})`},props); t.textContent='FINISH';
   }
-  // lodge
+  // synagogue
   { const x=13650, y=ground(x)+6;
     const g=el('g',{transform:`translate(${x} ${y})`},props);
-    el('rect',{x:-150,y:-160,width:300,height:160,fill:'#7c4a2d'},g);
-    for (let i=0;i<6;i++) el('rect',{x:-150,y:-160+i*27,width:300,height:3,fill:'#5b3420'},g);
-    el('path',{d:'M-190 -150L0 -290L190 -150Z',fill:'#3b2416'},g);
-    el('path',{d:'M-196 -146L0 -296L196 -146L176 -146L0 -270L-176 -146Z',fill:'#f4f8fc'},g);
-    el('rect',{x:70,y:-300,width:34,height:80,fill:'#5b3420'},g);
-    el('rect',{x:-110,y:-120,width:60,height:50,fill:'#ffd36e',stroke:'#3b2416','stroke-width':6},g);
-    el('rect',{x:50,y:-120,width:60,height:50,fill:'#ffd36e',stroke:'#3b2416','stroke-width':6},g);
-    el('rect',{x:-26,y:-96,width:52,height:96,fill:'#3b2416'},g);
+    const star=(cx,cy,r,attrs)=>{ const tri=a0=>[0,120,240].map(a=>{const t=(a+a0)*Math.PI/180;return `${(cx+r*Math.cos(t)).toFixed(1)} ${(cy+r*Math.sin(t)).toFixed(1)}`;}).join(' L');
+      el('path',{d:`M${tri(-90)}Z M${tri(90)}Z`,fill:'none','stroke-linejoin':'round',...attrs},g); };
+    const arch=(ax,ay,w,h,fill,stroke)=>el('path',{d:`M${ax} ${ay}L${ax} ${ay-h+w/2}A${w/2} ${w/2} 0 0 1 ${ax+w} ${ay-h+w/2}L${ax+w} ${ay}Z`,fill,stroke:stroke||'#6b5434','stroke-width':5},g);
+    // steps + wings
+    el('rect',{x:-215,y:-16,width:430,height:16,fill:'#b9ad97'},g);
+    el('rect',{x:-200,y:-28,width:400,height:14,fill:'#cfc3ab'},g);
+    el('rect',{x:-185,y:-205,width:370,height:178,fill:'#e8dbc0'},g);
+    for (let i=1;i<7;i++) el('rect',{x:-185,y:-28-i*26,width:370,height:2,fill:'#d4c5a6'},g);
+    el('rect',{x:-195,y:-214,width:390,height:12,fill:'#cbbd9f'},g);
+    el('rect',{x:-198,y:-224,width:396,height:12,rx:6,fill:'#f4f8fc'},g);
+    // central facade
+    el('rect',{x:-88,y:-300,width:176,height:272,fill:'#f0e5cc'},g);
+    el('rect',{x:-96,y:-308,width:192,height:12,fill:'#cbbd9f'},g);
+    // dome
+    el('path',{d:'M-82 -308A82 82 0 0 1 82 -308Z',fill:'#5f9e8f',stroke:'#3f7266','stroke-width':4},g);
+    el('path',{d:'M-56 -368A82 82 0 0 1 56 -368Q40 -356 22 -362Q0 -350 -20 -362Q-40 -354 -56 -368Z',fill:'#f4f8fc'},g);
+    for (const dx of [-40,0,40]) el('path',{d:`M${dx} -308Q${dx*0.55} -350 0 -390`,stroke:'#3f7266','stroke-width':3,fill:'none'},g);
+    // Star of David on top
+    el('rect',{x:-3,y:-420,width:6,height:34,fill:'#c9a227'},g);
+    star(0,-436,20,{stroke:'#e0b52d','stroke-width':6});
+    // rose window with star
+    el('circle',{cx:0,cy:-245,r:34,fill:'#8fbbe0',stroke:'#6b5434','stroke-width':6},g);
+    star(0,-245,22,{stroke:'#ffffff','stroke-width':4.5});
+    // doors + windows
+    arch(-34,-28,68,130,'#5b3a29');
+    el('line',{x1:0,y1:-28,x2:0,y2:-124,stroke:'#3b2416','stroke-width':4},g);
+    for (const wx of [-165,-125,95,135]) arch(wx,-70,30,100,'#ffd36e');
+    star(-110,-178,12,{stroke:'#c9a227','stroke-width':3.5});
+    star(110,-178,12,{stroke:'#c9a227','stroke-width':3.5});
   }
-  const LODGE_SMOKE = {x:13650+87, y:ground(13650)+6-300};
 
   // parallax mountains
   function mountains(svg, w, h, n, base, amp, colorA, snow, sd){
@@ -875,11 +895,6 @@
       ctx.beginPath(); ctx.arc(q.x,q.y,q.r*(0.5+q.life*0.5),0,6.283); ctx.fill();
     }
     if (parts.length>600) parts.splice(0,parts.length-600);
-    // chimney smoke
-    if (!reduce && p>0.8){
-      const sxs=camX+LODGE_SMOKE.x*scale, sys=camY+LODGE_SMOKE.y*scale;
-      if (Math.random()<0.3*dt) parts.push({x:sxs,y:sys,vx:-0.3-Math.random()*0.4,vy:-0.8,life:1,r:6+Math.random()*6,c:'220,225,235',g:-0.005});
-    }
 
     requestAnimationFrame(frame);
   }
