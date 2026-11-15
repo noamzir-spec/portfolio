@@ -414,7 +414,7 @@
   let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
 
   // trees (behind ground)
-  const busy = x => SEGS.some(s=>x>s.xs-450 && x<s.xe+250) || (x>12900 && x<14100);
+  const busy = x => SEGS.some(s=>x>s.xs-450 && x<s.xe+250) || (x>12550 && x<13100);
   const treeG=$('trees');
   for (let x=-2600; x<END_X+3600; x+=110+rnd()*260){
     if (busy(x)) continue;
@@ -453,39 +453,6 @@
     el('rect',{x:x+w/2-8,y:ground(x+w/2)-300,width:16,height:300+ground(x+w/2)-ground(x)-0,fill:'#0f1a2e'},props);
     el('path',{d:`M${x-w/2} ${y-300}L${x+w/2} ${ground(x+w/2)-300}L${x+w/2} ${ground(x+w/2)-230}L${x-w/2} ${y-230}Z`,fill:'#ff5a1f'},props);
     const t=el('text',{x:x,y:y-252,'text-anchor':'middle','font-family':'Anton','font-size':48,fill:'#fff',transform:`rotate(${Math.atan2(ground(x+w/2)-y,w)*180/Math.PI} ${x} ${y-265})`},props); t.textContent='FINISH';
-  }
-  // synagogue
-  { const x=13650, y=ground(x)+6;
-    const g=el('g',{transform:`translate(${x} ${y})`},props);
-    const star=(cx,cy,r,attrs)=>{ const tri=a0=>[0,120,240].map(a=>{const t=(a+a0)*Math.PI/180;return `${(cx+r*Math.cos(t)).toFixed(1)} ${(cy+r*Math.sin(t)).toFixed(1)}`;}).join(' L');
-      el('path',{d:`M${tri(-90)}Z M${tri(90)}Z`,fill:'none','stroke-linejoin':'round',...attrs},g); };
-    const arch=(ax,ay,w,h,fill,stroke)=>el('path',{d:`M${ax} ${ay}L${ax} ${ay-h+w/2}A${w/2} ${w/2} 0 0 1 ${ax+w} ${ay-h+w/2}L${ax+w} ${ay}Z`,fill,stroke:stroke||'#6b5434','stroke-width':5},g);
-    // steps + wings
-    el('rect',{x:-215,y:-16,width:430,height:16,fill:'#b9ad97'},g);
-    el('rect',{x:-200,y:-28,width:400,height:14,fill:'#cfc3ab'},g);
-    el('rect',{x:-185,y:-205,width:370,height:178,fill:'#e8dbc0'},g);
-    for (let i=1;i<7;i++) el('rect',{x:-185,y:-28-i*26,width:370,height:2,fill:'#d4c5a6'},g);
-    el('rect',{x:-195,y:-214,width:390,height:12,fill:'#cbbd9f'},g);
-    el('rect',{x:-198,y:-224,width:396,height:12,rx:6,fill:'#f4f8fc'},g);
-    // central facade
-    el('rect',{x:-88,y:-300,width:176,height:272,fill:'#f0e5cc'},g);
-    el('rect',{x:-96,y:-308,width:192,height:12,fill:'#cbbd9f'},g);
-    // dome
-    el('path',{d:'M-82 -308A82 82 0 0 1 82 -308Z',fill:'#5f9e8f',stroke:'#3f7266','stroke-width':4},g);
-    el('path',{d:'M-56 -368A82 82 0 0 1 56 -368Q40 -356 22 -362Q0 -350 -20 -362Q-40 -354 -56 -368Z',fill:'#f4f8fc'},g);
-    for (const dx of [-40,0,40]) el('path',{d:`M${dx} -308Q${dx*0.55} -350 0 -390`,stroke:'#3f7266','stroke-width':3,fill:'none'},g);
-    // Star of David on top
-    el('rect',{x:-3,y:-420,width:6,height:34,fill:'#c9a227'},g);
-    star(0,-436,20,{stroke:'#e0b52d','stroke-width':6});
-    // rose window with star
-    el('circle',{cx:0,cy:-245,r:34,fill:'#8fbbe0',stroke:'#6b5434','stroke-width':6},g);
-    star(0,-245,22,{stroke:'#ffffff','stroke-width':4.5});
-    // doors + windows
-    arch(-34,-28,68,130,'#5b3a29');
-    el('line',{x1:0,y1:-28,x2:0,y2:-124,stroke:'#3b2416','stroke-width':4},g);
-    for (const wx of [-165,-125,95,135]) arch(wx,-70,30,100,'#ffd36e');
-    star(-110,-178,12,{stroke:'#c9a227','stroke-width':3.5});
-    star(110,-178,12,{stroke:'#c9a227','stroke-width':3.5});
   }
 
   // parallax mountains
