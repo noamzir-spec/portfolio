@@ -200,6 +200,48 @@
     .card .w>span,.card .fw,.card .chips span,.card .btn,.card .hint,.card .contact,.phead h2 .w>span{opacity:1!important;transform:none!important;filter:none!important}
     .card .cardimg{clip-path:none}
   }
+  /* lodge interaction */
+  #lodgeG{cursor:pointer;outline:none}
+  #lodgeG .win{transition:fill .25s}
+  #lodgeG:hover .win,#lodgeG:focus .win{fill:#fff6c9}
+  #lodgeG .bob{animation:bob 1.3s ease-in-out infinite;transform-box:fill-box}
+  @keyframes bob{50%{transform:translateY(-12px)}}
+  #lodgeRoom{position:fixed;inset:0;z-index:16;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s;
+    background:repeating-linear-gradient(90deg,#4a2d1c 0 92px,#3f2617 92px 96px),#4a2d1c}
+  #lodgeRoom.on{opacity:1;pointer-events:auto}
+  #lodgeRoom .fireglow{position:absolute;left:50%;bottom:-25vh;width:120vw;height:70vh;transform:translateX(-50%);
+    background:radial-gradient(closest-side,rgba(255,150,40,.55),rgba(255,90,31,.18) 55%,transparent);animation:flicker 2.2s ease-in-out infinite alternate;pointer-events:none}
+  @keyframes flicker{0%{opacity:.75;transform:translateX(-50%) scale(1)}35%{opacity:1}60%{opacity:.82;transform:translateX(-50%) scale(1.04)}100%{opacity:.95;transform:translateX(-50%) scale(.98)}}
+  .room{position:relative;width:min(900px,100%);max-height:92vh;overflow:auto;color:#fdf3e3;text-align:center;padding:10px 6px 6px;
+    transform:translateY(20px) scale(.97);transition:transform .45s cubic-bezier(.2,1.2,.4,1)}
+  #lodgeRoom.on .room{transform:none}
+  .room .tag{color:#ffb703}
+  .room h2{font-family:Anton,sans-serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1;margin:8px 0 6px;text-shadow:0 4px 30px rgba(255,140,40,.45)}
+  .lrsub{opacity:.85;font-size:16px}
+  .lrclose{position:absolute;right:4px;top:0;background:rgba(255,255,255,.12);color:#fff}
+  .lrgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+  .wsign{border:0;cursor:pointer;text-align:left;border-radius:10px;padding:14px 14px 13px;color:#3b2416;font-family:"Space Grotesk",sans-serif;
+    background:linear-gradient(180deg,#e8c48f,#d6a86a);box-shadow:inset 0 -4px 0 rgba(0,0,0,.18),0 10px 22px -10px rgba(0,0,0,.6);
+    transform:rotate(var(--r));transition:transform .2s,box-shadow .2s;opacity:0}
+  #lodgeRoom.on .wsign{animation:hang .55s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(150ms + var(--i)*60ms)}
+  @keyframes hang{from{opacity:0;transform:translateY(-30px) rotate(calc(var(--r)*4))}to{opacity:1;transform:rotate(var(--r))}}
+  .wsign:hover{transform:rotate(0) translateY(-4px) scale(1.04)!important;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18),0 0 0 3px #ffb703,0 16px 28px -10px rgba(0,0,0,.6)}
+  .wsign .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#ff5a1f;color:#fff;font-size:12px;font-weight:700;margin-bottom:8px}
+  .wsign b{display:block;font-family:Anton,sans-serif;font-weight:400;font-size:21px;letter-spacing:.02em}
+  .wsign small{display:block;font-size:12px;opacity:.8;margin-top:2px;line-height:1.3}
+  .board{background:#b8875a;border:10px solid #6b4226;border-radius:12px;padding:14px 16px 18px;box-shadow:0 18px 40px -16px rgba(0,0,0,.7);
+    background-image:radial-gradient(rgba(0,0,0,.08) 1px,transparent 1.5px);background-size:9px 9px}
+  .boardtitle{font-family:Anton,sans-serif;font-size:20px;letter-spacing:.08em;color:#3b2416;text-transform:uppercase;margin-bottom:10px}
+  .notes{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .note{position:relative;background:#fffdf5;color:#3b2416;font-size:13.5px;line-height:1.35;padding:14px 14px 12px;width:min(160px,42%);text-align:left;
+    transform:rotate(var(--r));box-shadow:0 6px 12px -6px rgba(0,0,0,.5)}
+  .note.y{background:#fff1a8}
+  .note::before{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#ff5a1f;box-shadow:0 2px 2px rgba(0,0,0,.4)}
+  .lrfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px 0 8px}
+  .lrfoot .btn{margin:0}
+  .btn.ghost.light{color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.8)}
+  .btn.ghost.light:hover{background:#fff;color:var(--ink)}
+  @media (max-width:640px){ .lrgrid{grid-template-columns:1fr 1fr;gap:9px} .wsign b{font-size:18px} .note{width:44%;font-size:12.5px} }
   #hero .kicker{font-size:12px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;opacity:.9}
 
   /* trick popup */
@@ -336,6 +378,27 @@
     <div class="pnav"><button class="btn ghost" id="pPrev">← Prev</button><button class="btn" id="pNext">Next →</button></div>
   </div>
 </div>
+<div id="lodgeRoom" role="dialog" aria-modal="true" aria-labelledby="lrTitle">
+  <div class="fireglow"></div>
+  <div class="room">
+    <button class="pclose lrclose" id="lrClose" aria-label="Leave the lodge">✕</button>
+    <div class="tag">Inside the lodge</div>
+    <h2 id="lrTitle">Welcome to the Lodge</h2>
+    <p class="lrsub">Kick off your boots. Everything about me is in here.</p>
+    <div class="lrgrid" id="lrGrid"></div>
+    <div class="board">
+      <div class="boardtitle">Notice board</div>
+      <div class="notes">
+        <div class="note" style="--r:-2deg">From <b>Lexington, MA</b></div>
+        <div class="note" style="--r:1.5deg">Accounting at <b>Rutgers Business School</b>, CPA track</div>
+        <div class="note y" style="--r:-1deg">Looking for <b>audit internships</b>, 2027 & 2028, ideally <b>Boston</b></div>
+        <div class="note" style="--r:2deg">Built <b>generative AI workflows</b> a team still uses</div>
+        <div class="note y" style="--r:-1.5deg">Speaks <b>English, Hebrew</b> & some <b>Spanish</b></div>
+      </div>
+    </div>
+    <div class="lrfoot"><a class="btn" id="lrEmail">Email me</a><a class="btn ghost light" id="lrLinked" target="_blank" rel="noopener">LinkedIn</a><button class="btn ghost light" id="lrBack">Back to the slopes</button></div>
+  </div>
+</div>
 <div id="lightbox" role="dialog" aria-label="Photo viewer"><figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure><span class="x">Tap anywhere to close</span></div>
 
 <script>
@@ -452,7 +515,7 @@
   // lodge at the bottom
   const LODGE_X = 13880;
   { const x=LODGE_X, y=ground(x)+8;
-    const g=el('g',{transform:`translate(${x} ${y})`},props);
+    const g=el('g',{transform:`translate(${x} ${y})`,id:'lodgeG',role:'button',tabindex:'0','aria-label':'Enter the lodge'},props);
     el('rect',{x:-205,y:-18,width:410,height:18,fill:'#6b4a33'},g);                       // porch deck
     el('rect',{x:-180,y:-190,width:360,height:174,fill:'#8a5a3b'},g);                     // log walls
     for (let i=0;i<7;i++){ const yy=-188+i*25;
@@ -465,7 +528,7 @@
     el('path',{d:'M-236 -172L0 -338L236 -172L212 -172L0 -312L-212 -172Z',fill:'#f4f8fc'},g); // snow on roof
     el('path',{d:'M-60 -205L0 -246L60 -205Z',fill:'#6b4226'},g);
     el('circle',{cx:0,cy:-224,r:16,fill:'#ffd36e',stroke:'#4a2f1f','stroke-width':5},g);      // round attic window
-    for (const wx of [-140,70]){ el('rect',{x:wx,y:-140,width:70,height:58,fill:'#ffd36e',stroke:'#4a2f1f','stroke-width':7},g);
+    for (const wx of [-140,70]){ el('rect',{x:wx,y:-140,width:70,height:58,fill:'#ffd36e',stroke:'#4a2f1f','stroke-width':7,class:'win'},g);
       el('line',{x1:wx+35,y1:-140,x2:wx+35,y2:-82,stroke:'#4a2f1f','stroke-width':4},g);
       el('rect',{x:wx-6,y:-84,width:82,height:8,fill:'#f4f8fc'},g); }
     el('path',{d:'M-34 -18L-34 -112Q0 -136 34 -112L34 -18Z',fill:'#4a2f1f'},g);           // door
@@ -473,6 +536,12 @@
     el('rect',{x:-70,y:-176,width:140,height:30,rx:6,fill:'#3b2416'},g);                    // sign
     const t=el('text',{x:0,y:-153,'text-anchor':'middle','font-family':'Anton, sans-serif','font-size':22,'letter-spacing':3,fill:'#ffd36e'},g); t.textContent='THE LODGE';
     for (const lx of [-120,120]) el('circle',{cx:lx,cy:-30,r:9,fill:'#ffb703',opacity:.9},g); // porch lanterns
+    // signpost: "step inside"
+    const sp=el('g',{transform:'translate(285 0)'},g);
+    el('rect',{x:-5,y:-120,width:10,height:120,fill:'#4a2f1f'},sp);
+    const bob=el('g',{class:'bob'},sp);
+    el('path',{d:'M-78 -150L58 -150L78 -128L58 -106L-78 -106Z',fill:'#ff5a1f',stroke:'#4a2f1f','stroke-width':4,transform:'scale(-1 1)'},bob);
+    const st2=el('text',{x:8,y:-120,'text-anchor':'middle','font-family':'Anton, sans-serif','font-size':22,'letter-spacing':2,fill:'#fff'},bob); st2.textContent='STEP INSIDE';
   }
   const LODGE_SMOKE = {x:LODGE_X+116, y:ground(LODGE_X)+8-340};
   // finish arch
@@ -540,7 +609,7 @@
     if (c.chips) h+=chips(c.chips);
     if (c.hint) h+=`<div class="hint">${c.hint}</div>`;
     if (c.sec && !c.finish) h+=`<button class="btn opensec" data-sec="${c.sec}">Open section →</button>`;
-    if (c.finish) h+=`<div class="contact"><a class="btn" href="mailto:${EMAIL}">Email me</a><a class="btn ghost" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a><button class="btn ghost" id="again">Ride again ↑</button></div>
+    if (c.finish) h+=`<div class="contact"><a class="btn" href="mailto:${EMAIL}">Email me</a><a class="btn ghost" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a><button class="btn" id="enterLodge">Enter the Lodge</button><button class="btn ghost" id="again">Ride again ↑</button></div>
       <p class="small">${EMAIL}</p>`;
     div.innerHTML=h; cardsEl.appendChild(div); c.el=div;
   });
@@ -698,6 +767,31 @@
   panel.addEventListener('click',e=>{ if(e.target===panel) closePanel(); });
   addEventListener('keydown',e=>{ if(!panel.classList.contains('on')||$('lightbox').classList.contains('on')) return;
     if(e.key==='Escape') closePanel(); if(e.key==='ArrowRight') step(1); if(e.key==='ArrowLeft') step(-1); });
+  /* ---------------- lodge room ---------------- */
+  const lodgeRoom=$('lodgeRoom'), lrGrid=$('lrGrid');
+  const LR_HINT={about:'Who I am',education:'Rutgers Business School',experience:'CareRite · Got Em Sneakers · Rutgers Rec',projects:'AI fraud detection · AI weather model',
+                 leadership:'RutgersJX Maimonides',hobbies:'Photos & adventures',skills:'Tools & languages',contact:"Let's talk"};
+  SECTIONS.forEach((sx,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.className='wsign';
+    b.style.setProperty('--i',i); b.style.setProperty('--r',[-2,1.5,-1,2,-1.5,1,-2,1.5][i]+'deg');
+    b.innerHTML=`<span class="n">${i+1}</span><b>${sx.label}</b><small>${LR_HINT[sx.id]||''}</small>`;
+    b.addEventListener('click',()=>{ closeLodge(true); openSection(i); });
+    lrGrid.appendChild(b);
+  });
+  $('lrEmail').href='mailto:'+EMAIL; $('lrLinked').href=LINKEDIN;
+  function openLodge(){
+    SECTIONS.forEach((sx,i)=>unlock(i,true));   // walking in unlocks everything
+    lodgeRoom.classList.add('on'); document.documentElement.style.overflow='hidden';
+    scramble(lodgeRoom.querySelector('.tag'),600);
+  }
+  function closeLodge(keepLock){ lodgeRoom.classList.remove('on'); if(!keepLock) document.documentElement.style.overflow=''; }
+  const lodgeG=$('lodgeG');
+  lodgeG.addEventListener('click',openLodge);
+  lodgeG.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLodge(); } });
+  $('enterLodge').addEventListener('click',openLodge);
+  $('lrClose').addEventListener('click',()=>closeLodge());
+  $('lrBack').addEventListener('click',()=>closeLodge());
+  addEventListener('keydown',e=>{ if(e.key==='Escape' && lodgeRoom.classList.contains('on') && !panel.classList.contains('on')) closeLodge(); });
   $('secBtn').addEventListener('click',()=>{ const open=SECTIONS.map((x,j)=>x.unlocked?j:-1).filter(j=>j>=0); openSection(open[open.length-1]); });
   cardsEl.addEventListener('click',e=>{ const b=e.target.closest('.opensec'); if(!b) return; const i=SECTIONS.findIndex(x=>x.id===b.dataset.sec); if(i>=0&&SECTIONS[i].unlocked) openSection(i); });
   unlock(0,true);
