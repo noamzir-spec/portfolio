@@ -776,7 +776,7 @@
   }
 
   function frame(now){
-    const dt=Math.min(50,now-lastT)/16.67; lastT=now;
+    const dt=Math.max(0.25, Math.min(50,now-lastT)/16.67); lastT=now;
     const tp=targetP();
     cur += (tp-cur)*Math.min(1,0.11*dt);
     if (Math.abs(tp-cur)<0.00002) cur=tp;
@@ -815,6 +815,7 @@
       sway = 7*Math.sin(now/650) * (1-sp*0.6);
       lean = (x-prevX>=0?1:-1)*sp*7;
     } else if (st.mode==='rail'){ sway = 5*Math.sin(now/140); }
+    if (!Number.isFinite(tuck)) tuck = 0.3;
     setPose(P.stand, poseB, tuck, sway, lean);
     // keep the body closer to vertical than the board: riders stack over their feet instead of tipping downhill
     const upright = st.mode==='ground' ? 0.6 : st.mode==='rail' ? 0.5 : 0.6*(1-Math.sin(Math.PI*st.s));
@@ -835,6 +836,7 @@
     // speed
     const dx = x-prevX;
     speed += (Math.abs(dx)/dt - speed)*0.15;
+    if (!Number.isFinite(speed)) speed = 0;
     // screen position of rider
     const rx = camX + st.x*scale, ry = camY + st.y*scale;
 
